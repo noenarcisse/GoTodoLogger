@@ -53,7 +53,7 @@ func havingAWalk(dir string, ext []string, ignores []string) {
 }
 
 func parsingTodos() {
-	handle, err := os.OpenFile("test.py", os.O_RDONLY, 0400)
+	handle, err := os.OpenFile("test.txt", os.O_RDONLY, 0400)
 	if err != nil {
 		panic(err)
 	}
