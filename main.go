@@ -1,6 +1,7 @@
 package main
 
 import (
+	"GoLogTodos/internal/logger"
 	"GoLogTodos/internal/todos"
 	"GoLogTodos/internal/walker"
 	"fmt"
@@ -12,7 +13,6 @@ import (
 func main() {
 	bench(todoLogger)
 }
-
 func bench(f func()) {
 	t1 := time.Now()
 	f()
@@ -62,5 +62,7 @@ func todoLogger() {
 	for _, l := range todoLines {
 		fmt.Println(l)
 	}
+
+	logger.WriteToFile(todoLines)
 
 }
