@@ -24,12 +24,12 @@ func WalkThisWay(dir string, ext []string, ignores []string) (files []string, er
 		}
 
 		if d.IsDir() {
-			if slices.Contains(ignores, d.Name()) {
+			if slices.Contains(ignores, d.Name()) { //passer en set / map pour O(1) le contains
 				return filepath.SkipDir
 			}
 		} else {
 			e := filepath.Ext(path)
-			if !(slices.Contains(ext, e)) {
+			if !(slices.Contains(ext, e)) { //passer en set / map pour O(1) le contains
 				return nil
 			}
 
