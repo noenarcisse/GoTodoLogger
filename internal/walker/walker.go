@@ -1,7 +1,6 @@
 package walker
 
 import (
-	"fmt"
 	"io/fs"
 	"path/filepath"
 	"slices"
@@ -15,10 +14,10 @@ type WalkerOptions struct {
 }
 
 // walks and retrieves files
-func WalkThisWay(dir string, ext []string, ignores []string) {
-	files := []string{}
+func WalkThisWay(dir string, ext []string, ignores []string) (files []string, err error) {
+	// files := []string{}
 
-	filepath.WalkDir(dir, func(path string, d fs.DirEntry, err error) error {
+	err = filepath.WalkDir(dir, func(path string, d fs.DirEntry, err error) error {
 
 		if err != nil {
 			return err
@@ -39,8 +38,5 @@ func WalkThisWay(dir string, ext []string, ignores []string) {
 		}
 		return nil
 	})
-
-	for _, f := range files {
-		fmt.Println(f)
-	}
+	return
 }
