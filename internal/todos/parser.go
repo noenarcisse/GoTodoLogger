@@ -13,15 +13,16 @@ type TodoLine struct {
 	File         string
 	LineNum      int
 	TrailingLine []int
-	ContentSb    strings.Builder
+	Content      string
 }
 
 func (tl TodoLine) String() string {
-	return fmt.Sprintf(`Filepath : %s
-	 Lines : %s 
-	 Line num : %d 
-	 Trailing lines : %v`,
-		tl.File, tl.ContentSb.String(), tl.LineNum, tl.TrailingLine)
+	return fmt.Sprintf(`FILE : 
+	Filepath : %s
+	Lines : %s 
+	Line num : %d 
+	Trailing lines : %v`,
+		tl.File, tl.Content, tl.LineNum, tl.TrailingLine)
 }
 
 //opens file, find lines, caches them
@@ -112,9 +113,12 @@ func GetAll(file string) []TodoLine {
 		if isTrailingLine {
 			if IsCommentLine(ext, line) {
 				todo.TrailingLine = append(todo.TrailingLine, linenum)
-				todo.ContentSb.WriteString(line)
+				sb.WriteString(strings.TrimSpace(line))
+				sb.WriteString("\n")
 			} else {
 				//si non ->
+				todo.Content = sb.String()
+				sb.Reset()
 				todosFound = append(todosFound, todo)
 				isTrailingLine = false
 				todo = TodoLine{File: file}
@@ -123,8 +127,8 @@ func GetAll(file string) []TodoLine {
 
 		if HasLineTodo(ext, line) {
 			todo.LineNum = linenum
-			sb.WriteString(line)
-			//todo.ContentSb.WriteString(line)
+			sb.WriteString(strings.TrimSpace(line))
+			sb.WriteString("\n")
 			isTrailingLine = true
 		}
 
