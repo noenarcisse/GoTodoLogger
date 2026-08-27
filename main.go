@@ -6,9 +6,21 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 )
 
 func main() {
+	bench(todoLogger)
+}
+
+func bench(f func()) {
+	t1 := time.Now()
+	f()
+	execTime := time.Since(t1)
+	fmt.Printf("exec time : %v\n", execTime)
+}
+
+func todoLogger() {
 
 	args := os.Args[1:]
 	exts := []string{
