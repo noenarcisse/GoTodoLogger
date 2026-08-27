@@ -5,15 +5,21 @@ import (
 	"GoLogTodos/internal/walker"
 	"fmt"
 	"os"
+	"strings"
 )
 
 func main() {
 
 	args := os.Args[1:]
-
-	for _, a := range args {
-		fmt.Println(a)
+	exts := []string{
+		".go",
 	}
+	for _, a := range args {
+		exts = append(exts, "."+a)
+	}
+
+	fmt.Print("Looking for files : ")
+	fmt.Println(strings.Join(exts, ", "))
 
 	ignores := []string{
 		".git",
@@ -24,10 +30,8 @@ func main() {
 		".venv", //uh?
 		"__pycache__",
 	}
-	ext := []string{
-		".go",
-	}
-	files, err := walker.WalkThisWay(".", ext, ignores)
+
+	files, err := walker.WalkThisWay(".", exts, ignores)
 	if err != nil {
 		panic(err)
 	}

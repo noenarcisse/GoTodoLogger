@@ -10,18 +10,18 @@ import (
 )
 
 type TodoLine struct {
-	File         string
-	LineNum      int
-	TrailingLine []int
-	Content      string
+	File         string //abs filepath ref
+	LineNum      int    // number of first line with todo
+	TrailingLine []int  // numbers of the comments directly after the first todo line
+	Content      string // lines content
 }
 
 func (tl TodoLine) String() string {
 	return fmt.Sprintf(`FILE : 
-	Filepath : %s
-	Lines : %s 
-	Line num : %d 
-	Trailing lines : %v`,
+Filepath : %s
+Lines : %s 
+Line num : %d 
+Trailing lines : %v`,
 		tl.File, tl.Content, tl.LineNum, tl.TrailingLine)
 }
 
@@ -113,8 +113,9 @@ func GetAll(file string) []TodoLine {
 		if isTrailingLine {
 			if IsCommentLine(ext, line) {
 				todo.TrailingLine = append(todo.TrailingLine, linenum)
-				sb.WriteString(strings.TrimSpace(line))
 				sb.WriteString("\n")
+				sb.WriteString(strings.TrimSpace(line))
+
 			} else {
 				//si non ->
 				todo.Content = sb.String()
@@ -128,7 +129,7 @@ func GetAll(file string) []TodoLine {
 		if HasLineTodo(ext, line) {
 			todo.LineNum = linenum
 			sb.WriteString(strings.TrimSpace(line))
-			sb.WriteString("\n")
+			// sb.WriteString("\n")
 			isTrailingLine = true
 		}
 
