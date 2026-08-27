@@ -31,10 +31,20 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	todoLines := []todos.TodoLine{}
+
 	for _, f := range files {
 		fmt.Println(f)
-		todos.GetAll(f)
+
+		found := todos.GetAll(f)
+		if len(found) > 0 {
+			todoLines = append(todoLines, found...)
+		}
 	}
 
-	// todos.GetAll("test.sql")
+	for _, l := range todoLines {
+		fmt.Println(l)
+	}
+
 }
