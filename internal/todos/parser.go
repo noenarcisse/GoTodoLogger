@@ -101,6 +101,7 @@ func GetAll(file string) []TodoLine {
 
 	linenum := 1
 	todo := TodoLine{File: file}
+	sb := strings.Builder{}
 	isTrailingLine := false
 	ext := filepath.Ext(file)
 
@@ -122,7 +123,8 @@ func GetAll(file string) []TodoLine {
 
 		if HasLineTodo(ext, line) {
 			todo.LineNum = linenum
-			todo.ContentSb.WriteString(line)
+			sb.WriteString(line)
+			//todo.ContentSb.WriteString(line)
 			isTrailingLine = true
 		}
 
