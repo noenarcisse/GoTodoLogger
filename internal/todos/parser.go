@@ -72,9 +72,7 @@ func IsCommentLine(ext string, line string) bool {
 
 // Opens a file, look for TODOS comments and theirs trailing comments.
 // Returns all lines founds and closes the file.
-func GetAll(file string) []TodoLine {
-	todosFound := []TodoLine{}
-
+func GetAll(file string) (found []TodoLine) {
 	handle, err := os.OpenFile(file, os.O_RDONLY, 0400)
 	if err != nil {
 		panic(err)
@@ -89,7 +87,6 @@ func GetAll(file string) []TodoLine {
 		File:  file,
 		Lines: map[int]string{},
 	}
-	sb := strings.Builder{}
 
 	isTrailingLine := false
 	ext := filepath.Ext(file)
@@ -100,18 +97,11 @@ func GetAll(file string) []TodoLine {
 
 		if isTrailingLine {
 			if IsCommentLine(ext, line) {
-
 				todo.Lines[linenum] = strings.TrimSpace(line)
-				// todo.TrailingLine = append(todo.TrailingLine, linenum)
-				// sb.WriteString("\n")
-				// sb.WriteString(strings.TrimSpace(line))
-
 			} else {
-				//si non ->
-				todo.Content = sb.String()
-				sb.Reset()
-				todosFound = append(todosFound, todo)
+				found = append(found, todo)
 				isTrailingLine = false
+				//reset todo
 				todo = TodoLine{
 					File:  file,
 					Lines: map[int]string{},
@@ -122,8 +112,6 @@ func GetAll(file string) []TodoLine {
 		if HasLineTodo(ext, line) {
 			todo.Lines[linenum] = strings.TrimSpace(line)
 			todo.LineNum = linenum
-			// sb.WriteString(strings.TrimSpace(line))
-			// sb.WriteString("\n")
 			isTrailingLine = true
 		}
 
@@ -132,5 +120,5 @@ func GetAll(file string) []TodoLine {
 		}
 		linenum++
 	}
-	return todosFound
+	return
 }

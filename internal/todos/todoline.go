@@ -7,21 +7,17 @@ import (
 )
 
 type TodoLine struct {
-	File         string //abs filepath ref
-	Lines        map[int]string
-	LineNum      int    // number of first line with todo
-	TrailingLine []int  // numbers of the comments directly after the first todo line
-	Content      string // lines content
+	File    string //abs filepath ref
+	Lines   map[int]string
+	LineNum int // number of first line with todo
 }
 
 func (tl TodoLine) String() string {
 	return fmt.Sprintf(`FILE : 
 Filepath : %s
 Lines : %v
-Lines : %s 
-Line num : %d 
-Trailing lines : %v`,
-		tl.File, tl.Lines, tl.Content, tl.LineNum, tl.TrailingLine)
+Todo Line num : %d`,
+		tl.File, tl.Lines, tl.LineNum)
 }
 
 func (tl TodoLine) Format() string {
@@ -37,5 +33,4 @@ func (tl TodoLine) Format() string {
 		sb.WriteString("\n")
 	}
 	return sb.String()
-	// panic("Not implemented yet")
 }
