@@ -1,6 +1,4 @@
 # TODOS Logger
-
-TODO Logger :
 ```
 todos [files] [outputs]
 ```
