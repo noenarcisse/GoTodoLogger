@@ -23,11 +23,22 @@ func bench(f func()) {
 func todoLogger() {
 
 	args := os.Args[1:]
-	exts := []string{
-		".go",
+
+	if args[0] == "-h" {
+		//display help
+		//quits
 	}
-	for _, a := range args {
-		exts = append(exts, "."+a)
+
+	splet := strings.Split(args[0], ",")
+
+	if len(splet) <= 0 {
+		panic("Aie")
+	}
+
+	exts := []string{}
+
+	for _, s := range splet {
+		exts = append(exts, "."+s) //todo fix ca
 	}
 
 	fmt.Print("Looking for files : ")
