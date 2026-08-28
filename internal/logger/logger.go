@@ -15,17 +15,17 @@ func CreateLog(tds []todos.TodoLine) string {
 
 	for _, td := range tds {
 		sb.WriteString(td.Format())
-		sb.WriteString("\n\n")
+		sb.WriteString("\n")
 	}
 
 	return sb.String()
 }
 
 func WriteToConsole(s string) {
-	panic("not implemented")
+	fmt.Println(s)
 }
 
-func WriteToFile(tds []todos.TodoLine) error {
+func WriteToFile(s string) error {
 	t := time.Now()
 
 	logfilename := fmt.Sprintf("log_%d", t.Unix())
@@ -43,9 +43,7 @@ func WriteToFile(tds []todos.TodoLine) error {
 	}
 	defer handle.Close()
 
-	log := CreateLog(tds)
-
-	written, err := handle.WriteString(log) //todo change this
+	written, err := handle.WriteString(s)
 	if err != nil {
 		return err
 	}
