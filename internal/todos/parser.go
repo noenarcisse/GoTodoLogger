@@ -25,6 +25,10 @@ Trailing lines : %v`,
 		tl.File, tl.Content, tl.LineNum, tl.TrailingLine)
 }
 
+func (tl TodoLine) Format() string {
+	panic("Not implemented yet")
+}
+
 //opens file, find lines, caches them
 
 func getCommentSymbol(ext string) string {
