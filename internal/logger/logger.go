@@ -9,29 +9,8 @@ import (
 	"time"
 )
 
-//log stuff in console or in a file ?
-//requires time, guid etc ?
-
-func WriteToFile(tds []todos.TodoLine) {
-	t := time.Now()
-
-	logfilename := fmt.Sprintf("log_%d", t.Unix())
-	fmt.Println(logfilename)
-
-	// s := "Un truc important"
-
-	dirname := "logs"
-	err := os.MkdirAll(dirname, 0755)
-	if err != nil {
-		panic(err)
-	}
-
-	handle, err := os.OpenFile(filepath.Join(dirname, logfilename), os.O_WRONLY|os.O_CREATE, 0644)
-	if err != nil {
-		panic(err) // rlly ?
-	}
-	defer handle.Close()
-
+// Create a full tetx log based on the TODOS found
+func CreateLog(tds []todos.TodoLine) string {
 	sb := strings.Builder{}
 
 	for _, td := range tds {
@@ -39,31 +18,38 @@ func WriteToFile(tds []todos.TodoLine) {
 		sb.WriteString("\n\n")
 	}
 
-	written, err := handle.WriteString(sb.String()) //todo change this
-	if err != nil {
-		panic(err)
-	}
-
-	fmt.Printf("%d bytes ecrits\n", written)
-
+	return sb.String()
 }
 
-func WriteFileTest() {
+func WriteToConsole(s string) {
+	panic("not implemented")
+}
+
+func WriteToFile(tds []todos.TodoLine) error {
 	t := time.Now()
 
 	logfilename := fmt.Sprintf("log_%d", t.Unix())
-	fmt.Println(logfilename)
-
-	s := "Un truc important"
-
+	fmt.Printf("Logging in %s\n", logfilename)
 	dirname := "logs"
-	err := os.Mkdir(dirname, 0644)
+
+	err := os.MkdirAll(dirname, 0755)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
-	err = os.WriteFile(filepath.Join(dirname, logfilename), []byte(s), 0644)
+	handle, err := os.OpenFile(filepath.Join(dirname, logfilename), os.O_WRONLY|os.O_CREATE, 0644)
 	if err != nil {
-		panic(err)
+		return err
 	}
+	defer handle.Close()
+
+	log := CreateLog(tds)
+
+	written, err := handle.WriteString(log) //todo change this
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("%d bytes ecrits\n", written)
+	return nil
 }
