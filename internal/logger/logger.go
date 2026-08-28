@@ -35,7 +35,7 @@ func WriteToFile(tds []todos.TodoLine) {
 	sb := strings.Builder{}
 
 	for _, td := range tds {
-		sb.WriteString(td.String())
+		sb.WriteString(td.Format())
 		sb.WriteString("\n\n")
 	}
 

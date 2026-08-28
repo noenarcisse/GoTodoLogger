@@ -5,12 +5,14 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"unicode"
 )
 
 type TodoLine struct {
 	File         string //abs filepath ref
+	Lines        map[int]string
 	LineNum      int    // number of first line with todo
 	TrailingLine []int  // numbers of the comments directly after the first todo line
 	Content      string // lines content
@@ -19,14 +21,27 @@ type TodoLine struct {
 func (tl TodoLine) String() string {
 	return fmt.Sprintf(`FILE : 
 Filepath : %s
+Lines : %v
 Lines : %s 
 Line num : %d 
 Trailing lines : %v`,
-		tl.File, tl.Content, tl.LineNum, tl.TrailingLine)
+		tl.File, tl.Lines, tl.Content, tl.LineNum, tl.TrailingLine)
 }
 
 func (tl TodoLine) Format() string {
-	panic("Not implemented yet")
+	sb := strings.Builder{}
+
+	sb.WriteString(tl.File)
+	sb.WriteString(" : \n")
+
+	for k, v := range tl.Lines {
+		sb.WriteString(strconv.Itoa(k)) // err ?
+		sb.WriteString(" : ")
+		sb.WriteString(v)
+		sb.WriteString("\n")
+	}
+	return sb.String()
+	// panic("Not implemented yet")
 }
 
 //opens file, find lines, caches them
@@ -105,8 +120,12 @@ func GetAll(file string) []TodoLine {
 	scan.Split(bufio.ScanLines)
 
 	linenum := 1
-	todo := TodoLine{File: file}
+	todo := TodoLine{
+		File:  file,
+		Lines: map[int]string{},
+	}
 	sb := strings.Builder{}
+
 	isTrailingLine := false
 	ext := filepath.Ext(file)
 
@@ -116,9 +135,11 @@ func GetAll(file string) []TodoLine {
 
 		if isTrailingLine {
 			if IsCommentLine(ext, line) {
-				todo.TrailingLine = append(todo.TrailingLine, linenum)
-				sb.WriteString("\n")
-				sb.WriteString(strings.TrimSpace(line))
+
+				todo.Lines[linenum] = strings.TrimSpace(line)
+				// todo.TrailingLine = append(todo.TrailingLine, linenum)
+				// sb.WriteString("\n")
+				// sb.WriteString(strings.TrimSpace(line))
 
 			} else {
 				//si non ->
@@ -126,13 +147,17 @@ func GetAll(file string) []TodoLine {
 				sb.Reset()
 				todosFound = append(todosFound, todo)
 				isTrailingLine = false
-				todo = TodoLine{File: file}
+				todo = TodoLine{
+					File:  file,
+					Lines: map[int]string{},
+				}
 			}
 		}
 
 		if HasLineTodo(ext, line) {
+			todo.Lines[linenum] = strings.TrimSpace(line)
 			todo.LineNum = linenum
-			sb.WriteString(strings.TrimSpace(line))
+			// sb.WriteString(strings.TrimSpace(line))
 			// sb.WriteString("\n")
 			isTrailingLine = true
 		}
