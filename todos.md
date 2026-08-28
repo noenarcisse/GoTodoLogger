@@ -1,5 +1,4 @@
-passer les lignes en map
-map[int]string
+# todos
 
 cmd args line
 cmd helper
@@ -9,3 +8,7 @@ func format instead of String() for the TodoLine obj
 args console only
 goroutine / folder ?
 multiple file format in args[1] with go|cs|py for example
+
+
+# maybe
+mmaper par file ?
