@@ -27,7 +27,7 @@ func (tl TodoLine) Format() string {
 	sb.WriteString(" : \n")
 
 	for k, v := range tl.Lines {
-		sb.WriteString(strconv.Itoa(k)) // err ?
+		sb.WriteString(strconv.Itoa(k))
 		sb.WriteString(" : ")
 		sb.WriteString(v)
 		sb.WriteString("\n")

@@ -15,7 +15,6 @@ type WalkerOptions struct {
 
 // walks and retrieves files
 func WalkThisWay(dir string, ext []string, ignores []string) (files []string, err error) {
-	// files := []string{}
 
 	err = filepath.WalkDir(dir, func(path string, d fs.DirEntry, err error) error {
 
@@ -24,12 +23,12 @@ func WalkThisWay(dir string, ext []string, ignores []string) (files []string, er
 		}
 
 		if d.IsDir() {
-			if slices.Contains(ignores, d.Name()) { //passer en set / map pour O(1) le contains
+			if slices.Contains(ignores, d.Name()) { //todo passer en set / map pour O(1) le contains
 				return filepath.SkipDir
 			}
 		} else {
 			e := filepath.Ext(path)
-			if !(slices.Contains(ext, e)) { //passer en set / map pour O(1) le contains
+			if !(slices.Contains(ext, e)) { //todo passer en set / map pour O(1) le contains
 				return nil
 			}
 
