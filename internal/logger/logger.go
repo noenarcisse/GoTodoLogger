@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// Create a full tetx log based on the TODOS found
+// Create a full text log based on the TODOS found
 func CreateLog(tds []todos.TodoLine) string {
 	sb := strings.Builder{}
 

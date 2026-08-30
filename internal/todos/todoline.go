@@ -9,7 +9,7 @@ import (
 
 type TodoLine struct {
 	File    string                     //abs filepath ref
-	Lines   *sm.SortedMap[int, string] // todo <- this thing IS NOT SORTED by default
+	Lines   *sm.SortedMap[int, string] // lazy sorted map
 	LineNum int                        // number of first line with todo
 }
 
