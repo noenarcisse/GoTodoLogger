@@ -1,15 +1,16 @@
 package todos
 
 import (
+	sm "TODOS_Logger/pkg/sorted_map"
 	"fmt"
 	"strconv"
 	"strings"
 )
 
 type TodoLine struct {
-	File    string //abs filepath ref
-	Lines   map[int]string
-	LineNum int // number of first line with todo
+	File    string                     //abs filepath ref
+	Lines   *sm.SortedMap[int, string] // todo <- this thing IS NOT SORTED by default
+	LineNum int                        // number of first line with todo
 }
 
 func (tl TodoLine) String() string {
@@ -26,7 +27,7 @@ func (tl TodoLine) Format() string {
 	sb.WriteString(tl.File)
 	sb.WriteString(" : \n")
 
-	for k, v := range tl.Lines {
+	for k, v := range tl.Lines.Items() {
 		sb.WriteString(strconv.Itoa(k))
 		sb.WriteString(" : ")
 		sb.WriteString(v)

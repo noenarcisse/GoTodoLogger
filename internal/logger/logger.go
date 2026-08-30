@@ -1,7 +1,7 @@
 package logger
 
 import (
-	"GoLogTodos/internal/todos"
+	"TODOS_Logger/internal/todos"
 	"fmt"
 	"os"
 	"path/filepath"

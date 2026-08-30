@@ -1,6 +1,7 @@
 package todos
 
 import (
+	sm "TODOS_Logger/pkg/sorted_map"
 	"bufio"
 	"os"
 	"path/filepath"
@@ -85,7 +86,7 @@ func GetAll(file string) (found []TodoLine) {
 	linenum := 1
 	todo := TodoLine{
 		File:  file,
-		Lines: map[int]string{},
+		Lines: sm.NewSortedMap[int, string](),
 	}
 
 	isTrailingLine := false
@@ -97,20 +98,20 @@ func GetAll(file string) (found []TodoLine) {
 
 		if isTrailingLine {
 			if IsCommentLine(ext, line) {
-				todo.Lines[linenum] = strings.TrimSpace(line)
+				todo.Lines.Add(linenum, strings.TrimSpace(line))
 			} else {
 				found = append(found, todo)
 				isTrailingLine = false
 				//reset todo
 				todo = TodoLine{
 					File:  file,
-					Lines: map[int]string{},
+					Lines: sm.NewSortedMap[int, string](),
 				}
 			}
 		}
 
 		if HasLineTodo(ext, line) {
-			todo.Lines[linenum] = strings.TrimSpace(line)
+			todo.Lines.Add(linenum, strings.TrimSpace(line))
 			todo.LineNum = linenum
 			isTrailingLine = true
 		}

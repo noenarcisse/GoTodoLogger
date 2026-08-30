@@ -1,11 +1,11 @@
 package main
 
 import (
-	"GoLogTodos/internal/exectime"
-	"GoLogTodos/internal/help"
-	"GoLogTodos/internal/logger"
-	"GoLogTodos/internal/todos"
-	"GoLogTodos/internal/walker"
+	"TODOS_Logger/internal/exectime"
+	"TODOS_Logger/internal/help"
+	"TODOS_Logger/internal/logger"
+	"TODOS_Logger/internal/todos"
+	"TODOS_Logger/internal/walker"
 	"fmt"
 	"os"
 	"slices"
