@@ -89,20 +89,36 @@ func todoLogger() {
 		return
 	}
 
-	log := logger.CreateLog(todoLines)
+	log := logger.CreateLog(todoLines) // maybe be unused for md file or html
 
 	if len(args) > 1 {
-		splet = strings.Split(args[1], "")
+		options := args[1:]
 
-		if slices.Contains(splet, "c") {
+		if slices.Contains(options, "c") {
 			logger.WriteToConsole(log)
 		}
-		if slices.Contains(splet, "f") {
+		if slices.Contains(options, "f") {
 			err := logger.WriteToFile(log)
 			if err != nil {
 				panic(err)
 			}
 		}
+		if slices.Contains(options, "md") {
+			log = logger.CreateLogToMd(todoLines)
+			err := logger.WriteToSpecialFile(log, "md")
+			if err != nil {
+				panic(err)
+			}
+		}
+		if slices.Contains(options, "html") {
+			panic("Not implemented")
+			// log = logger.CreateLogToMd(todoLines)
+			// err := logger.WriteToSpecialFile(log, "md")
+			// if err != nil {
+			// 	panic(err)
+			// }
+		}
+
 	} else {
 		logger.WriteToConsole(log)
 	}

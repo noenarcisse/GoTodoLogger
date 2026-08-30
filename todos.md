@@ -1,9 +1,10 @@
 # todos
 
+passer le Log en obj et interface pour les différents appels de formattage de log
+lorsque nécéssaire
+
 goroutine / folder ?
 tests
-
-add line num after filename so you can jump directly in the file :d
 
 err management a clean
 

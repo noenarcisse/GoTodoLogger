@@ -3,6 +3,7 @@ package todos
 import (
 	sm "TODOS_Logger/pkg/sorted_map"
 	"fmt"
+	"path/filepath"
 	"strconv"
 	"strings"
 )
@@ -25,6 +26,8 @@ func (tl TodoLine) Format() string {
 	sb := strings.Builder{}
 
 	sb.WriteString(tl.File)
+	sb.WriteString(":")
+	sb.WriteString(strconv.Itoa(tl.LineNum))
 	sb.WriteString(" : \n")
 
 	for k, v := range tl.Lines.Items() {
@@ -33,5 +36,42 @@ func (tl TodoLine) Format() string {
 		sb.WriteString(v)
 		sb.WriteString("\n")
 	}
+	return sb.String()
+}
+
+func (tl TodoLine) FormatToFile() string {
+	sb := strings.Builder{}
+
+	sb.WriteString(tl.File)
+	sb.WriteString(":")
+	sb.WriteString(strconv.Itoa(tl.LineNum))
+	sb.WriteRune('\n')
+
+	for k, v := range tl.Lines.Items() {
+		sb.WriteString(strconv.Itoa(k))
+		sb.WriteString(" : ")
+		sb.WriteString(v)
+		sb.WriteString("\n")
+	}
+	return sb.String()
+}
+
+func (tl TodoLine) FormatToMd() string {
+	sb := strings.Builder{}
+
+	filename := fmt.Sprintf("[%s:%s](vscode://file/%s:%s)", tl.File, strconv.Itoa(tl.LineNum), tl.File, strconv.Itoa(tl.LineNum))
+
+	sb.WriteString(filepath.ToSlash(filename))
+	sb.WriteString(" <br> \n")
+	sb.WriteString("```\n")
+
+	for k, v := range tl.Lines.Items() {
+		sb.WriteString(strconv.Itoa(k))
+		sb.WriteString(" : ")
+		sb.WriteString(v)
+		sb.WriteString("\n")
+	}
+	sb.WriteString("```")
+	sb.WriteString("\n<br>\n")
 	return sb.String()
 }

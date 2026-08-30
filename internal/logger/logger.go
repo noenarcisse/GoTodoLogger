@@ -21,6 +21,17 @@ func CreateLog(tds []todos.TodoLine) string {
 	return sb.String()
 }
 
+func CreateLogToMd(tds []todos.TodoLine) string {
+	sb := strings.Builder{}
+
+	for _, td := range tds {
+		sb.WriteString(td.FormatToMd())
+		sb.WriteString("\n")
+	}
+
+	return sb.String()
+}
+
 func WriteToConsole(s string) {
 	fmt.Println(s)
 }
@@ -29,6 +40,33 @@ func WriteToFile(s string) error {
 	t := time.Now()
 
 	logfilename := fmt.Sprintf("log_%d", t.Unix())
+	fmt.Printf("Logging in %s\n", logfilename)
+	dirname := "logs"
+
+	err := os.MkdirAll(dirname, 0755)
+	if err != nil {
+		return err
+	}
+
+	handle, err := os.OpenFile(filepath.Join(dirname, logfilename), os.O_WRONLY|os.O_CREATE, 0644)
+	if err != nil {
+		return err
+	}
+	defer handle.Close()
+
+	written, err := handle.WriteString(s)
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("%d bytes ecrits\n", written)
+	return nil
+}
+
+func WriteToSpecialFile(s string, ext string) error {
+	t := time.Now()
+
+	logfilename := fmt.Sprintf("log_%d.%s", t.Unix(), ext)
 	fmt.Printf("Logging in %s\n", logfilename)
 	dirname := "logs"
 
