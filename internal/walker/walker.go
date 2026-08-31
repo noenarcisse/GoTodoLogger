@@ -27,7 +27,7 @@ func WalkThisWay(dir string, ext set[string], ignores set[string]) (files []stri
 			}
 		} else {
 			e := filepath.Ext(path)
-			if _, ok := ext[e]; ok {
+			if _, ok := ext[e]; !ok {
 				return nil
 			}
 			a, _ := filepath.Abs(path)
