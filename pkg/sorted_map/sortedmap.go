@@ -19,6 +19,11 @@ func NewSortedMap[T cmp.Ordered, U any]() *SortedMap[T, U] {
 	}
 }
 
+func (s *SortedMap[T, U]) Clear() {
+	s.inner = map[T]U{}
+	s.order = []T{}
+}
+
 func (s *SortedMap[T, U]) sort() {
 	slices.Sort(s.order)
 	s.sorted = true
