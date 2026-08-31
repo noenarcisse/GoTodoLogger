@@ -1,6 +1,7 @@
 package main
 
 import (
+	"TODOS_Logger/internal/console"
 	"TODOS_Logger/internal/exectime"
 	"TODOS_Logger/internal/help"
 	"TODOS_Logger/internal/logger"
@@ -20,17 +21,10 @@ func main() {
 }
 
 func todoLogger() {
-	const (
-		Reset  = "\033[0m"
-		Red    = "\033[31m"
-		Green  = "\033[32m"
-		Yellow = "\033[33m"
-		Blue   = "\033[34m"
-	)
 
 	args := os.Args[1:]
 	if len(args) <= 0 {
-		fmt.Printf(Red + "Error: missing args !\n\n" + Reset)
+		console.Printcln(console.RED, "Error: missing args !\n")
 		help.Display()
 		return
 	}
@@ -43,7 +37,7 @@ func todoLogger() {
 	splet := strings.Split(args[0], ",")
 
 	if len(splet) <= 0 {
-		fmt.Println(Red + "Missing files to search for TODOS comments" + Reset)
+		console.Printcln(console.RED, "Missing files to search for TODOS comments")
 		return
 	}
 
@@ -75,7 +69,7 @@ func todoLogger() {
 	}
 
 	if len(files) <= 0 {
-		fmt.Println(Red + "No files found" + Reset)
+		console.Printcln(console.RED, "No file found")
 		return
 	}
 
@@ -91,11 +85,11 @@ func todoLogger() {
 	}
 
 	if len(todoLines) <= 0 {
-		fmt.Println(Red + "No TODOS found in files" + Reset)
+		console.Printcln(console.RED, "No TODO comment found in files")
 		return
 	}
 
-	log := logger.CreateLog(todoLines) // maybe be unused for md file or html
+	log := logger.CreateLog(todoLines) //todo maybe be unused for md file or html
 
 	if len(args) > 1 {
 		options := args[1:]
@@ -117,12 +111,37 @@ func todoLogger() {
 			}
 		}
 		if slices.Contains(options, "html") {
-			panic("Not implemented")
-			// log = logger.CreateLogToMd(todoLines)
-			// err := logger.WriteToSpecialFile(log, "md")
-			// if err != nil {
-			// 	panic(err)
-			// }
+			log := logger.CreateLogToHTML(todoLines)
+			css := `
+			<style>
+				body{
+					background-color: #3f3f3f;
+				}
+				div{
+					background-color: #5e5e5e;
+					border: 1px solid #7a7979; 
+					padding: 10px; 
+					margin:10px; 
+					border-radius:5px;
+				}
+			</style>
+			`
+			sb := strings.Builder{}
+			sb.WriteString(`
+			<html>
+			<head>`)
+			sb.WriteString(css)
+			sb.WriteString(`
+			</head>
+			<body>
+			`)
+			sb.WriteString(log)
+			sb.WriteString(`
+			</body>
+			</html>
+			`)
+
+			logger.WriteToSpecialFile(sb.String(), "html")
 		}
 
 	} else {

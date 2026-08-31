@@ -32,6 +32,16 @@ func CreateLogToMd(tds []todos.TodoLine) string {
 	return sb.String()
 }
 
+func CreateLogToHTML(tds []todos.TodoLine) string {
+	sb := strings.Builder{}
+
+	for _, td := range tds {
+		sb.WriteString(td.FormatToHTML())
+		sb.WriteString("\n")
+	}
+	return sb.String()
+}
+
 func WriteToConsole(s string) {
 	fmt.Println(s)
 }

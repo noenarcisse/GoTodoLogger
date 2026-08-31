@@ -75,3 +75,24 @@ func (tl TodoLine) FormatToMd() string {
 	sb.WriteString("\n<br>\n")
 	return sb.String()
 }
+
+func (tl TodoLine) FormatToHTML() string {
+	sb := strings.Builder{}
+
+	filename := fmt.Sprintf("<a href=\"vscode://file/%s:%s\">%s:%s</a>", tl.File, strconv.Itoa(tl.LineNum), tl.File, strconv.Itoa(tl.LineNum))
+
+	// sb.WriteString(filepath.ToSlash(filename))
+	sb.WriteString("<div style=\"\">\n")
+	sb.WriteString(filename)
+
+	for k, v := range tl.Lines.Items() {
+
+		// splet := strings.Split(v, "\n")
+		sb.WriteString("<br/>\n")
+		sb.WriteString(strconv.Itoa(k))
+		sb.WriteString(" : ")
+		sb.WriteString(v)
+	}
+	sb.WriteString("</div>\n")
+	return sb.String()
+}
