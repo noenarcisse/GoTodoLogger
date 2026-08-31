@@ -114,16 +114,27 @@ func todoLogger() {
 			log := logger.CreateLogToHTML(todoLines)
 			css := `
 			<style>
-				body{
-					background-color: #3f3f3f;
-				}
-				div{
-					background-color: #5e5e5e;
-					border: 1px solid #7a7979; 
-					padding: 10px; 
-					margin:10px; 
-					border-radius:5px;
-				}
+/* 
+prep inline CSS here
+*/
+
+body{
+    background-color: #2b2a2a;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: small;
+    color: white;
+}
+div{
+    background-color: #3d3d3d;
+    border: 1px solid #7a7979; 
+    padding: 10px; 
+    margin:10px; 
+    border-radius:5px;
+}
+a {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: rgb(83, 163, 255);
+}
 			</style>
 			`
 			sb := strings.Builder{}

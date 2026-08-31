@@ -84,6 +84,8 @@ func (tl TodoLine) FormatToHTML() string {
 	// sb.WriteString(filepath.ToSlash(filename))
 	sb.WriteString("<div style=\"\">\n")
 	sb.WriteString(filename)
+	sb.WriteString("<br/>\n")
+	sb.WriteString("<code>")
 
 	for k, v := range tl.Lines.Items() {
 
@@ -93,6 +95,7 @@ func (tl TodoLine) FormatToHTML() string {
 		sb.WriteString(" : ")
 		sb.WriteString(v)
 	}
+	sb.WriteString("</code>")
 	sb.WriteString("</div>\n")
 	return sb.String()
 }
