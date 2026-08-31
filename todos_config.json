@@ -1,0 +1,11 @@
+{
+    "ignores": [
+        ".git",
+        ".vscode",
+        "bin",
+        "obj",
+        "node_modules",
+        ".venv",
+        "__pycache__"
+    ]
+}
