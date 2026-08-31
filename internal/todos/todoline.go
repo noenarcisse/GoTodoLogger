@@ -79,20 +79,19 @@ func (tl TodoLine) FormatToMd() string {
 func (tl TodoLine) FormatToHTML() string {
 	sb := strings.Builder{}
 
+	//vscode://
 	filename := fmt.Sprintf("<a href=\"vscode://file/%s:%s\">%s:%s</a>", tl.File, strconv.Itoa(tl.LineNum), tl.File, strconv.Itoa(tl.LineNum))
-
-	// sb.WriteString(filepath.ToSlash(filename))
-	sb.WriteString("<div style=\"\">\n")
+	sb.WriteString("<div>\n")
+	sb.WriteString("📄 ")
 	sb.WriteString(filename)
 	sb.WriteString("<br/>\n")
 	sb.WriteString("<code>")
 
 	for k, v := range tl.Lines.Items() {
 
-		// splet := strings.Split(v, "\n")
 		sb.WriteString("<br/>\n")
 		sb.WriteString(strconv.Itoa(k))
-		sb.WriteString(" : ")
+		sb.WriteString("   ")
 		sb.WriteString(v)
 	}
 	sb.WriteString("</code>")

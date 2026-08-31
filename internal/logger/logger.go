@@ -73,11 +73,9 @@ func WriteToFile(s string) error {
 	return nil
 }
 
-func WriteToSpecialFile(s string, ext string) error {
-	t := time.Now()
-
-	logfilename := fmt.Sprintf("log_%d.%s", t.Unix(), ext)
-	fmt.Printf("Logging in %s\n", logfilename)
+func WriteToSpecialFile(s string, logfilename string, ext string) error {
+	filetowrite := logfilename + "." + ext
+	fmt.Printf("Logging in %s\n", filetowrite)
 	dirname := "logs"
 
 	err := os.MkdirAll(dirname, 0755)
@@ -85,7 +83,7 @@ func WriteToSpecialFile(s string, ext string) error {
 		return err
 	}
 
-	handle, err := os.OpenFile(filepath.Join(dirname, logfilename), os.O_WRONLY|os.O_CREATE, 0644)
+	handle, err := os.OpenFile(filepath.Join(dirname, filetowrite), os.O_WRONLY|os.O_CREATE, 0644)
 	if err != nil {
 		return err
 	}

@@ -12,6 +12,7 @@ import (
 	"os"
 	"slices"
 	"strings"
+	"time"
 )
 
 type set[T comparable] = map[T]struct{}
@@ -89,7 +90,10 @@ func todoLogger() {
 		return
 	}
 
+	//todo refacto mieux ca en lazy ou equivalent ou prep un bloc d'ecriture separé de la console
 	log := logger.CreateLog(todoLines) //todo maybe be unused for md file or html
+	t := time.Now()
+	logfilename := fmt.Sprintf("log_%d", t.Unix())
 
 	if len(args) > 1 {
 		options := args[1:]
@@ -105,12 +109,13 @@ func todoLogger() {
 		}
 		if slices.Contains(options, "md") {
 			log = logger.CreateLogToMd(todoLines)
-			err := logger.WriteToSpecialFile(log, "md")
+			err := logger.WriteToSpecialFile(log, logfilename, "md")
 			if err != nil {
 				panic(err)
 			}
 		}
 		if slices.Contains(options, "html") {
+
 			log := logger.CreateLogToHTML(todoLines)
 			css := `
 			<style>
@@ -119,21 +124,39 @@ prep inline CSS here
 */
 
 body{
-    background-color: #2b2a2a;
+    background-color: #202224;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: small;
+    font-size: 12px;
     color: white;
 }
 div{
-    background-color: #3d3d3d;
-    border: 1px solid #7a7979; 
+    /* background-color: #3d3d3d; */
+ 
     padding: 10px; 
-    margin:10px; 
+    margin:10px;
+
+    border: 1px solid #7a7979;
     border-radius:5px;
 }
 a {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    color: rgb(83, 163, 255);
+    color: #50b7e0;
+    text-decoration: none;
+}
+a:hover{
+    text-decoration: underline;
+}
+code {
+    display: block;
+
+    margin: 1em;
+    padding-bottom:1em;
+    padding-left: 1em;
+
+    color:rgb(116, 164, 88);
+    background-color: #333232;
+
+    border-radius:5px;
 }
 			</style>
 			`
@@ -145,14 +168,16 @@ a {
 			sb.WriteString(`
 			</head>
 			<body>
+			<div>
+			<h1>`)
+			sb.WriteString(logfilename)
+			sb.WriteString(`</h1>
+			</div>
 			`)
 			sb.WriteString(log)
-			sb.WriteString(`
-			</body>
-			</html>
-			`)
+			sb.WriteString("</body></html>")
 
-			logger.WriteToSpecialFile(sb.String(), "html")
+			logger.WriteToSpecialFile(sb.String(), logfilename, "html")
 		}
 
 	} else {
