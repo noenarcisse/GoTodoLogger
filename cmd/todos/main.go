@@ -117,8 +117,7 @@ func todoLogger() {
 		if slices.Contains(options, "html") {
 
 			log := logger.CreateLogToHTML(todoLines)
-			css := `
-			<style>
+			css := `<style>
 /* 
 prep inline CSS here
 */
@@ -158,8 +157,7 @@ code {
 
     border-radius:5px;
 }
-			</style>
-			`
+</style>`
 			sb := strings.Builder{}
 			sb.WriteString(`
 			<html>
