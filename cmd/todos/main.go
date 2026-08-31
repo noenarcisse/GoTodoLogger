@@ -7,10 +7,13 @@ import (
 	"TODOS_Logger/internal/todos"
 	"TODOS_Logger/internal/walker"
 	"fmt"
+	"maps"
 	"os"
 	"slices"
 	"strings"
 )
+
+type set[T comparable] = map[T]struct{}
 
 func main() {
 	exectime.Benchmark(todoLogger)
@@ -44,23 +47,26 @@ func todoLogger() {
 		return
 	}
 
-	exts := []string{}
-
+	exts := set[string]{}
+	sb := strings.Builder{}
 	for _, s := range splet {
-		exts = append(exts, "."+s) //todo fix ca
+		sb.WriteRune('.')
+		sb.WriteString(s)
+		exts[sb.String()] = struct{}{}
+		sb.Reset()
 	}
 
 	fmt.Print("Looking for files : ")
-	fmt.Println(strings.Join(exts, ", "))
+	fmt.Println(strings.Join(slices.Collect(maps.Keys(exts)), ", "))
 
-	ignores := []string{
-		".git",
-		".vscode",
-		"bin",
-		"obj",
-		"node_modules",
-		".venv", //uh?
-		"__pycache__",
+	ignores := set[string]{
+		".git":         struct{}{},
+		".vscode":      struct{}{},
+		"bin":          struct{}{},
+		"obj":          struct{}{},
+		"node_modules": struct{}{},
+		".venv":        struct{}{},
+		"__pycache__":  struct{}{},
 	}
 
 	files, err := walker.WalkThisWay(".", exts, ignores)

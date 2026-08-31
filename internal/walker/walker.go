@@ -3,10 +3,9 @@ package walker
 import (
 	"io/fs"
 	"path/filepath"
-	"slices"
 )
 
-type set[T comparable] map[T]struct{}
+type set[T comparable] = map[T]struct{}
 
 type WalkerOptions struct {
 	Extensions  set[string]
@@ -14,7 +13,7 @@ type WalkerOptions struct {
 }
 
 // walks and retrieves files
-func WalkThisWay(dir string, ext []string, ignores []string) (files []string, err error) {
+func WalkThisWay(dir string, ext set[string], ignores set[string]) (files []string, err error) {
 
 	err = filepath.WalkDir(dir, func(path string, d fs.DirEntry, err error) error {
 
@@ -23,15 +22,14 @@ func WalkThisWay(dir string, ext []string, ignores []string) (files []string, er
 		}
 
 		if d.IsDir() {
-			if slices.Contains(ignores, d.Name()) { //todo passer en set / map pour O(1) le contains
+			if _, ok := ignores[d.Name()]; ok {
 				return filepath.SkipDir
 			}
 		} else {
 			e := filepath.Ext(path)
-			if !(slices.Contains(ext, e)) { //todo passer en set / map pour O(1) le contains
+			if _, ok := ext[e]; ok {
 				return nil
 			}
-
 			a, _ := filepath.Abs(path)
 			files = append(files, a)
 		}
