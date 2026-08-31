@@ -1,5 +1,7 @@
 package main
 
+import "TODOS_Logger/internal/console"
+
 func main() {
 	var num1 int
 	num2 := 2
@@ -13,4 +15,10 @@ func main() {
 
 	println(variable)
 
+	console.Printcln(console.RED, "%s", variable)
+	console.Printcln(console.GREEN, "%s", variable)
+	console.Printcln(console.BLUE, "%s", variable)
+	console.Printcln(console.YELLOW, "%s", variable)
+
+	console.Printc(console.RED, "%s", variable)
 }
