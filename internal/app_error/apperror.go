@@ -20,7 +20,7 @@ func ErrMsg2(e Error, infos string) string {
 
 	switch e {
 	case MISSING_ARGS:
-		msg = "Error: missing args !" + infos
+		msg = "Error: missing args !" + infos // todo fix this typo here
 	case NO_FILE_SEARCH_SPECIFIED:
 		msg = "Missing files to search for TODOS comments" //todo review this? poor phrasing
 
