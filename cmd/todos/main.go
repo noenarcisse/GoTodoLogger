@@ -97,25 +97,35 @@ func todoLogger() {
 	logfilename := fmt.Sprintf("log_%d", t.Unix())
 
 	if len(args) > 1 {
-		options := args[1:] // todo go with a set
-
-		if slices.Contains(options, "c") {
-			logger.WriteToConsole(log)
+		options := set[string]{}
+		for _, e := range args[1:] {
+			options[e] = struct{}{}
 		}
-		if slices.Contains(options, "f") {
+
+		fmt.Println(options)
+
+		if _, ok := options["c"]; ok {
+			logger.WriteToConsole(log)
+			delete(options, "c")
+		}
+
+		if _, ok := options["f"]; ok {
 			err := logger.WriteToFile(log)
 			if err != nil {
 				panic(err)
 			}
+			delete(options, "f")
 		}
-		if slices.Contains(options, "md") {
+
+		if _, ok := options["md"]; ok {
 			log = logger.CreateLogToMd(todoLines)
 			err := logger.WriteToSpecialFile(log, logfilename, "md")
 			if err != nil {
 				panic(err)
 			}
+			delete(options, "md")
 		}
-		if slices.Contains(options, "html") {
+		if _, ok := options["html"]; ok {
 
 			log := logger.CreateLogToHTML(todoLines)
 			css := `<style>
@@ -177,6 +187,12 @@ code {
 			sb.WriteString("</body></html>")
 
 			logger.WriteToSpecialFile(sb.String(), logfilename, "html")
+			delete(options, "html")
+		}
+
+		if len(options) > 0 {
+			console.Printcln(console.RED, "Erreur args non reconnus : %v",
+				strings.Join(slices.Collect(maps.Keys(options)), ", "))
 		}
 
 	} else {
