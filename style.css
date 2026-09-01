@@ -9,8 +9,6 @@ body{
     color: white;
 }
 div{
-    /* background-color: #3d3d3d; */
- 
     padding: 10px; 
     margin:10px;
 
@@ -32,7 +30,5 @@ code {
     padding-left: 1em;
     color:rgb(116, 164, 88);
     background-color: #333232;
-
-    /* border: 1px solid #7a7979;  */
     border-radius:5px;
 }
