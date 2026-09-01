@@ -20,6 +20,9 @@ import (
 //go:embed style.css
 var css string
 
+//go:embed template.html
+var html string
+
 type set[T comparable] = map[T]struct{}
 
 func main() {
@@ -132,45 +135,18 @@ func todoLogger() {
 			log := logger.CreateLogToHTML(todoLines)
 
 			sb := strings.Builder{}
-			sb.WriteString(`
-			<html>
-			<head>
-			<style>
-			`)
-			sb.WriteString(css)
-			sb.WriteString(`
-			</style>
-			</head>
-			<body>
-			<div>
-			<h1>`)
-			sb.WriteString(strings.ToUpper(logfilename))
-			sb.WriteString("</h1>")
-
-			// sb.WriteString(time.Local.String()) //  46.9149ms vs 8ms normallement sur la machine de BF
-			loc := time.FixedZone("UTC+2", 2*60*60)
-			t := time.Now().In(loc)
-			sb.WriteString(t.Format("02/01/2006   15:04:05"))
-
-			sb.WriteString(`
-				<div>
-					<h2>Files seen: </h2>
-					<ul>
-			`)
 			for _, f := range files {
 				sb.WriteString("<li>")
 				sb.WriteString(f)
 				sb.WriteString("</li>")
 			}
-			sb.WriteString(`
-					</ul>
-				</div>
-			</div>
-			`)
-			sb.WriteString(log)
-			sb.WriteString("</body></html>")
+			html2 := strings.Replace(html, "[css]", css, 1)
+			html2 = strings.Replace(html2, "[log]", log, 1)
+			html2 = strings.Replace(html2, "[files]", sb.String(), 1)
+			html2 = strings.ReplaceAll(html2, "[filename]", strings.ToUpper(logfilename))
+			html2 = strings.Replace(html2, "[log]", log, 1)
 
-			logger.WriteToSpecialFile(sb.String(), logfilename, "html")
+			logger.WriteToSpecialFile(html2, logfilename, "html")
 			delete(options, "html")
 		}
 
