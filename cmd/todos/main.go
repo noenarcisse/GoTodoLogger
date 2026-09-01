@@ -1,6 +1,7 @@
 package main
 
 import (
+	ae "TODOS_Logger/internal/app_error"
 	"TODOS_Logger/internal/console"
 	"TODOS_Logger/internal/exectime"
 	"TODOS_Logger/internal/help"
@@ -25,7 +26,7 @@ func todoLogger() {
 
 	args := os.Args[1:]
 	if len(args) <= 0 {
-		console.Printcln(console.RED, "Error: missing args !\n")
+		console.Printcln(console.RED, ae.ErrMsg(ae.MISSING_ARGS))
 		help.Display()
 		return
 	}
@@ -38,7 +39,7 @@ func todoLogger() {
 	splet := strings.Split(args[0], ",")
 
 	if len(splet) <= 0 {
-		console.Printcln(console.RED, "Missing files to search for TODOS comments")
+		console.Printcln(console.RED, ae.ErrMsg(ae.NO_FILE_SEARCH_SPECIFIED))
 		return
 	}
 
@@ -70,7 +71,7 @@ func todoLogger() {
 	}
 
 	if len(files) <= 0 {
-		console.Printcln(console.RED, "No file found")
+		console.Printcln(console.RED, ae.ErrMsg(ae.NO_FILE_FOUND))
 		return
 	}
 
@@ -86,7 +87,7 @@ func todoLogger() {
 	}
 
 	if len(todoLines) <= 0 {
-		console.Printcln(console.RED, "No TODO comment found in files")
+		console.Printcln(console.RED, ae.ErrMsg(ae.NO_TODO_COMMENT))
 		return
 	}
 
@@ -96,7 +97,7 @@ func todoLogger() {
 	logfilename := fmt.Sprintf("log_%d", t.Unix())
 
 	if len(args) > 1 {
-		options := args[1:]
+		options := args[1:] // todo go with a set
 
 		if slices.Contains(options, "c") {
 			logger.WriteToConsole(log)
