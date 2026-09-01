@@ -1,4 +1,4 @@
-package logger
+package formatter
 
 import (
 	"TODOS_Logger/internal/todos"

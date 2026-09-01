@@ -1,6 +1,7 @@
 package logger
 
 import (
+	"TODOS_Logger/internal/formatter"
 	"TODOS_Logger/internal/todos"
 	"fmt"
 	"os"
@@ -10,65 +11,47 @@ import (
 )
 
 // todo wip
-type FormatterFunc func([]todos.TodoLine) string
+type FormatterFunc func(todos.TodoLine) string
 
 func createLog(tds []todos.TodoLine, f FormatterFunc) string {
 	sb := strings.Builder{}
-
 	for _, td := range tds {
-		sb.WriteString(td.Format())
+		sb.WriteString(f(td))
 		sb.WriteString("\n")
 	}
-
 	return sb.String()
-	return f(tds)
 }
 
 // Create a full text log based on the TODOS found
 func CreateLog(tds []todos.TodoLine) string {
-	sb := strings.Builder{}
-
-	for _, td := range tds {
-		sb.WriteString(td.Format())
-		sb.WriteString("\n")
-	}
-
-	return sb.String()
+	return createLog(tds, formatter.ToConsole)
 }
-
 func CreateLogToMd(tds []todos.TodoLine) string {
-	sb := strings.Builder{}
-
-	for _, td := range tds {
-		sb.WriteString(td.FormatToMd())
-		sb.WriteString("\n")
-	}
-
-	return sb.String()
+	return createLog(tds, formatter.ToMd)
 }
-
 func CreateLogToHTML(tds []todos.TodoLine) string {
-	sb := strings.Builder{}
-
-	for _, td := range tds {
-		sb.WriteString(td.FormatToHTML())
-		sb.WriteString("\n")
-	}
-	return sb.String()
+	return createLog(tds, formatter.ToHTML)
 }
 
+func createLogDir(dirname string) error {
+
+	err := os.MkdirAll(dirname, 0755)
+	if err != nil {
+		return err
+	}
+	return nil
+}
 func WriteToConsole(s string) {
 	fmt.Println(s)
 }
-
 func WriteToFile(s string) error {
 	t := time.Now()
 
 	logfilename := fmt.Sprintf("log_%d", t.Unix())
 	fmt.Printf("Logging in %s\n", logfilename)
-	dirname := "logs"
 
-	err := os.MkdirAll(dirname, 0755)
+	dirname := "logs"
+	err := createLogDir(dirname)
 	if err != nil {
 		return err
 	}
@@ -84,16 +67,15 @@ func WriteToFile(s string) error {
 		return err
 	}
 
-	fmt.Printf("%d bytes ecrits\n", written)
+	fmt.Printf("%d bytes written\n", written)
 	return nil
 }
-
 func WriteToSpecialFile(s string, logfilename string, ext string) error {
 	filetowrite := logfilename + "." + ext
 	fmt.Printf("Logging in %s\n", filetowrite)
-	dirname := "logs"
 
-	err := os.MkdirAll(dirname, 0755)
+	dirname := "logs"
+	err := createLogDir(dirname)
 	if err != nil {
 		return err
 	}
@@ -109,6 +91,6 @@ func WriteToSpecialFile(s string, logfilename string, ext string) error {
 		return err
 	}
 
-	fmt.Printf("%d bytes ecrits\n", written)
+	fmt.Printf("%d bytes written\n", written)
 	return nil
 }
