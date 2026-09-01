@@ -10,6 +10,7 @@ import (
 	"TODOS_Logger/internal/walker"
 	_ "embed"
 	"fmt"
+	"html"
 	"maps"
 	"os"
 	"slices"
@@ -21,7 +22,7 @@ import (
 var css string
 
 //go:embed template.html
-var html string
+var templateHtml string
 
 type set[T comparable] = map[T]struct{}
 
@@ -137,10 +138,10 @@ func todoLogger() {
 			sb := strings.Builder{}
 			for _, f := range files {
 				sb.WriteString("<li>")
-				sb.WriteString(f)
+				sb.WriteString(html.EscapeString(f))
 				sb.WriteString("</li>")
 			}
-			html2 := strings.Replace(html, "[css]", css, 1)
+			html2 := strings.Replace(templateHtml, "[css]", css, 1)
 			html2 = strings.Replace(html2, "[log]", log, 1)
 			html2 = strings.Replace(html2, "[files]", sb.String(), 1)
 			html2 = strings.ReplaceAll(html2, "[filename]", strings.ToUpper(logfilename))

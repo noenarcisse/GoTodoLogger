@@ -2,6 +2,7 @@ package formatter
 
 import (
 	"TODOS_Logger/internal/todos"
+	"html"
 
 	"fmt"
 	"path/filepath"
@@ -67,7 +68,11 @@ func ToHTML(tl todos.TodoLine) string {
 	sb := strings.Builder{}
 
 	//vscode://
-	filename := fmt.Sprintf("<a href=\"vscode://file/%s:%s\">%s:%s</a>", tl.File, strconv.Itoa(tl.LineNum), tl.File, strconv.Itoa(tl.LineNum))
+	filename := fmt.Sprintf("<a href=\"vscode://file/%s:%s\">%s:%s</a>",
+		html.EscapeString(tl.File),
+		strconv.Itoa(tl.LineNum),
+		html.EscapeString(tl.File),
+		strconv.Itoa(tl.LineNum))
 	sb.WriteString("<div>\n")
 	sb.WriteString("📄 ")
 	sb.WriteString(filename)
@@ -79,7 +84,7 @@ func ToHTML(tl todos.TodoLine) string {
 		sb.WriteString("<br/>\n")
 		sb.WriteString(strconv.Itoa(k))
 		sb.WriteString("   ")
-		sb.WriteString(v)
+		sb.WriteString(html.EscapeString(v))
 	}
 	sb.WriteString("</code>")
 	sb.WriteString("</div>\n")
