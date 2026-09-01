@@ -9,6 +9,21 @@ import (
 	"time"
 )
 
+// todo wip
+type FormatterFunc func([]todos.TodoLine) string
+
+func createLog(tds []todos.TodoLine, f FormatterFunc) string {
+	sb := strings.Builder{}
+
+	for _, td := range tds {
+		sb.WriteString(td.Format())
+		sb.WriteString("\n")
+	}
+
+	return sb.String()
+	return f(tds)
+}
+
 // Create a full text log based on the TODOS found
 func CreateLog(tds []todos.TodoLine) string {
 	sb := strings.Builder{}

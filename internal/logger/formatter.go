@@ -1,31 +1,14 @@
-package todos
+package logger
 
 import (
-	sm "TODOS_Logger/pkg/sorted_map"
+	"TODOS_Logger/internal/todos"
 	"fmt"
 	"path/filepath"
 	"strconv"
 	"strings"
 )
 
-type TodoLine struct {
-	File    string                     //abs filepath ref
-	Lines   *sm.SortedMap[int, string] // lazy sorted map
-	LineNum int                        // number of first line with todo
-}
-
-func (tl TodoLine) String() string {
-	return fmt.Sprintf(`FILE : 
-Filepath : %s
-Lines : %v
-Todo Line num : %d`,
-		tl.File, tl.Lines, tl.LineNum)
-}
-
-//todo remove this
-// -> moved to formatter.go
-
-func (tl TodoLine) Format() string {
+func ToConsole(tl todos.TodoLine) string {
 	sb := strings.Builder{}
 
 	sb.WriteString(tl.File)
@@ -42,7 +25,7 @@ func (tl TodoLine) Format() string {
 	return sb.String()
 }
 
-func (tl TodoLine) FormatToFile() string {
+func ToFile(tl todos.TodoLine) string {
 	sb := strings.Builder{}
 
 	sb.WriteString(tl.File)
@@ -59,7 +42,7 @@ func (tl TodoLine) FormatToFile() string {
 	return sb.String()
 }
 
-func (tl TodoLine) FormatToMd() string {
+func ToMd(tl todos.TodoLine) string {
 	sb := strings.Builder{}
 
 	filename := fmt.Sprintf("[%s:%s](vscode://file/%s:%s)", tl.File, strconv.Itoa(tl.LineNum), tl.File, strconv.Itoa(tl.LineNum))
@@ -79,7 +62,7 @@ func (tl TodoLine) FormatToMd() string {
 	return sb.String()
 }
 
-func (tl TodoLine) FormatToHTML() string {
+func ToHTML(tl todos.TodoLine) string {
 	sb := strings.Builder{}
 
 	//vscode://
