@@ -143,8 +143,8 @@ func todoLogger() {
 			}
 			html2 := strings.Replace(templateHtml, "[css]", css, 1)
 			html2 = strings.Replace(html2, "[log]", log, 1)
-			html2 = strings.Replace(html2, "[files]", sb.String(), 1)
 			html2 = strings.ReplaceAll(html2, "[filename]", strings.ToUpper(logfilename))
+			html2 = strings.Replace(html2, "[files]", sb.String(), 1)
 			html2 = strings.Replace(html2, "[log]", log, 1)
 
 			logger.WriteToSpecialFile(html2, logfilename, "html")
