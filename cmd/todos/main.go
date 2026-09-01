@@ -138,13 +138,14 @@ body{
     color: white;
 }
 div{
-    /* background-color: #3d3d3d; */
- 
     padding: 10px; 
     margin:10px;
 
     border: 1px solid #7a7979;
     border-radius:5px;
+}
+div:first-child{
+     border: none;
 }
 a {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -156,14 +157,11 @@ a:hover{
 }
 code {
     display: block;
-
     margin: 1em;
     padding-bottom:1em;
     padding-left: 1em;
-
     color:rgb(116, 164, 88);
     background-color: #333232;
-
     border-radius:5px;
 }
 </style>`

@@ -15,6 +15,9 @@ div{
     border: 1px solid #7a7979;
     border-radius:5px;
 }
+div:first-child{
+     border: none;
+}
 a {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     color: #50b7e0;
