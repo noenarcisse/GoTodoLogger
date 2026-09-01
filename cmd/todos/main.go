@@ -175,8 +175,27 @@ code {
 			<body>
 			<div>
 			<h1>`)
-			sb.WriteString(logfilename)
-			sb.WriteString(`</h1>
+			sb.WriteString(strings.ToUpper(logfilename))
+			sb.WriteString("</h1>")
+
+			// sb.WriteString(time.Local.String()) //  46.9149ms vs 8ms normallement sur la machine de BF
+			loc := time.FixedZone("UTC+2", 2*60*60)
+			t := time.Now().In(loc)
+			sb.WriteString(t.Format("02/01/2006   15:04:05"))
+
+			sb.WriteString(`
+				<div>
+					<h2>Files seen: </h2>
+					<ul>
+			`)
+			for _, f := range files {
+				sb.WriteString("<li>")
+				sb.WriteString(f)
+				sb.WriteString("</li>")
+			}
+			sb.WriteString(`
+					</ul>
+				</div>
 			</div>
 			`)
 			sb.WriteString(log)
