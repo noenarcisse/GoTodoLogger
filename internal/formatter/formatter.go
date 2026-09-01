@@ -2,6 +2,7 @@ package formatter
 
 import (
 	"TODOS_Logger/internal/todos"
+
 	"fmt"
 	"path/filepath"
 	"strconv"

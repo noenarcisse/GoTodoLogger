@@ -8,6 +8,7 @@ import (
 	"TODOS_Logger/internal/logger"
 	"TODOS_Logger/internal/todos"
 	"TODOS_Logger/internal/walker"
+	_ "embed"
 	"fmt"
 	"maps"
 	"os"
@@ -15,6 +16,9 @@ import (
 	"strings"
 	"time"
 )
+
+//go:embed style.css
+var css string
 
 type set[T comparable] = map[T]struct{}
 
@@ -126,51 +130,16 @@ func todoLogger() {
 		if _, ok := options["html"]; ok {
 
 			log := logger.CreateLogToHTML(todoLines)
-			css := `<style>
-/* 
-prep inline CSS here
-*/
 
-body{
-    background-color: #202224;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 12px;
-    color: white;
-}
-div{
-    padding: 10px; 
-    margin:10px;
-
-    border: 1px solid #7a7979;
-    border-radius:5px;
-}
-div:first-child{
-     border: none;
-}
-a {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    color: #50b7e0;
-    text-decoration: none;
-}
-a:hover{
-    text-decoration: underline;
-}
-code {
-    display: block;
-    margin: 1em;
-    padding-bottom:1em;
-    padding-left: 1em;
-    color:rgb(116, 164, 88);
-    background-color: #333232;
-    border-radius:5px;
-}
-</style>`
 			sb := strings.Builder{}
 			sb.WriteString(`
 			<html>
-			<head>`)
+			<head>
+			<style>
+			`)
 			sb.WriteString(css)
 			sb.WriteString(`
+			</style>
 			</head>
 			<body>
 			<div>
