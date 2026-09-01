@@ -102,8 +102,6 @@ func todoLogger() {
 			options[e] = struct{}{}
 		}
 
-		fmt.Println(options)
-
 		if _, ok := options["c"]; ok {
 			logger.WriteToConsole(log)
 			delete(options, "c")
