@@ -3,11 +3,9 @@ package logger
 import (
 	"TODOS_Logger/internal/formatter"
 	"TODOS_Logger/internal/todos"
-	"fmt"
+	"html"
 	"os"
-	"path/filepath"
 	"strings"
-	"time"
 )
 
 // todo wip
@@ -41,56 +39,18 @@ func createLogDir(dirname string) error {
 	}
 	return nil
 }
-func WriteToConsole(s string) {
-	fmt.Println(s)
-}
-func WriteToFile(s string) error {
-	t := time.Now()
 
-	logfilename := fmt.Sprintf("log_%d", t.Unix())
-	fmt.Printf("Logging in %s\n", logfilename)
-
-	dirname := "logs"
-	err := createLogDir(dirname)
-	if err != nil {
-		return err
+func PrepareHTMLContent(files []string, templateHtml string, css string, log string, logfilename string) string {
+	sb := strings.Builder{}
+	for _, f := range files {
+		sb.WriteString("<li>")
+		sb.WriteString(html.EscapeString(f))
+		sb.WriteString("</li>")
 	}
-
-	handle, err := os.OpenFile(filepath.Join(dirname, logfilename), os.O_WRONLY|os.O_CREATE, 0644)
-	if err != nil {
-		return err
-	}
-	defer handle.Close()
-
-	written, err := handle.WriteString(s)
-	if err != nil {
-		return err
-	}
-
-	fmt.Printf("%d bytes written\n", written)
-	return nil
-}
-func WriteToSpecialFile(s string, logfilename string, ext string) error {
-	filetowrite := logfilename + "." + ext
-	fmt.Printf("Logging in %s\n", filetowrite)
-
-	dirname := "logs"
-	err := createLogDir(dirname)
-	if err != nil {
-		return err
-	}
-
-	handle, err := os.OpenFile(filepath.Join(dirname, filetowrite), os.O_WRONLY|os.O_CREATE, 0644)
-	if err != nil {
-		return err
-	}
-	defer handle.Close()
-
-	written, err := handle.WriteString(s)
-	if err != nil {
-		return err
-	}
-
-	fmt.Printf("%d bytes written\n", written)
-	return nil
+	html2 := strings.Replace(templateHtml, "[css]", css, 1)
+	html2 = strings.Replace(html2, "[log]", log, 1)
+	html2 = strings.ReplaceAll(html2, "[filename]", strings.ToUpper(logfilename))
+	html2 = strings.Replace(html2, "[files]", sb.String(), 1)
+	html2 = strings.Replace(html2, "[log]", log, 1)
+	return html2
 }

@@ -10,7 +10,6 @@ import (
 	"TODOS_Logger/internal/walker"
 	_ "embed"
 	"fmt"
-	"html"
 	"maps"
 	"os"
 	"slices"
@@ -134,18 +133,7 @@ func todoLogger() {
 		if _, ok := options["html"]; ok {
 
 			log := logger.CreateLogToHTML(todoLines)
-
-			sb := strings.Builder{}
-			for _, f := range files {
-				sb.WriteString("<li>")
-				sb.WriteString(html.EscapeString(f))
-				sb.WriteString("</li>")
-			}
-			html2 := strings.Replace(templateHtml, "[css]", css, 1)
-			html2 = strings.Replace(html2, "[log]", log, 1)
-			html2 = strings.ReplaceAll(html2, "[filename]", strings.ToUpper(logfilename))
-			html2 = strings.Replace(html2, "[files]", sb.String(), 1)
-			html2 = strings.Replace(html2, "[log]", log, 1)
+			html2 := logger.PrepareHTMLContent(files, templateHtml, css, log, logfilename)
 
 			logger.WriteToSpecialFile(html2, logfilename, "html")
 			delete(options, "html")
