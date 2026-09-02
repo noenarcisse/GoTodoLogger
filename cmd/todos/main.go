@@ -99,7 +99,6 @@ func todoLogger() {
 	}
 
 	//todo refacto mieux ca en lazy ou equivalent ou prep un bloc d'ecriture separé de la console
-	log := logger.CreateLog(todoLines) //todo maybe be unused for md file or html
 	t := time.Now()
 	logfilename := fmt.Sprintf("log_%d", t.Unix())
 
@@ -110,11 +109,14 @@ func todoLogger() {
 		}
 
 		if _, ok := options["c"]; ok {
+			log := logger.CreateLog(todoLines) //todo maybe be unused for md file or html
+
 			logger.WriteToConsole(log)
 			delete(options, "c")
 		}
 
 		if _, ok := options["f"]; ok {
+			log := logger.CreateLog(todoLines) //todo maybe be unused for md file or html
 			err := logger.WriteToFile(log)
 			if err != nil {
 				panic(err)
@@ -123,7 +125,7 @@ func todoLogger() {
 		}
 
 		if _, ok := options["md"]; ok {
-			log = logger.CreateLogToMd(todoLines)
+			log := logger.CreateLogToMd(todoLines)
 			err := logger.WriteToSpecialFile(log, logfilename, "md")
 			if err != nil {
 				panic(err)
@@ -134,7 +136,6 @@ func todoLogger() {
 
 			log := logger.CreateLogToHTML(todoLines)
 			html2 := logger.PrepareHTMLContent(files, templateHtml, css, log, logfilename)
-
 			logger.WriteToSpecialFile(html2, logfilename, "html")
 			delete(options, "html")
 		}
@@ -145,6 +146,8 @@ func todoLogger() {
 		}
 
 	} else {
+		log := logger.CreateLog(todoLines) //todo maybe be unused for md file or html
+
 		logger.WriteToConsole(log)
 	}
 }
